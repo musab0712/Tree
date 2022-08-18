@@ -2,6 +2,28 @@ import java.util.Scanner;
 
 public class BTUses {
 
+    public static BinaryTreeNode<Integer> replaceNodewithdepth(BinaryTreeNode<Integer> root, int k) {
+        if(root == null){
+            return null;
+        }
+        root.data = k;
+        replaceNodewithdepth(root.left, k+1);
+        replaceNodewithdepth(root.right, k+1);
+        return root;
+    }
+
+    public static void printAtDepthK(BinaryTreeNode<Integer> root, int k) {
+        if(root == null){
+            return;
+        }
+        if(k == 0){
+            System.out.println(root.data);
+            return;
+        }
+        printAtDepthK(root.left, k-1);
+        printAtDepthK(root.right, k-1);
+    }
+
     public static int numLeafNodes(BinaryTreeNode<Integer> root) {
         if(root == null){
             return 0;
@@ -170,5 +192,10 @@ public class BTUses {
 
         int numLeafNodes = numLeafNodes(root);
         System.out.println("Number of leaf Nodes : " + numLeafNodes);
+
+        // root = replaceNodewithdepth(root, 0);
+        // inOrder(root);
+
+        printAtDepthK(root, 2);
     }
 }
