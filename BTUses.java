@@ -2,6 +2,20 @@ import java.util.Scanner;
 
 public class BTUses {
 
+    public static boolean isNodePresent(BinaryTreeNode<Integer> root, int x) {
+        if(root == null){
+            return false;
+        }
+        if (root.data == x) {
+            return true;
+        }
+        boolean left = isNodePresent(root.left, x);
+        if(left) return true;
+        boolean right = isNodePresent(root.right, x);
+        if(right) return true;
+        return false;
+    }
+
     public static BinaryTreeNode<Integer> replaceNodewithdepth(BinaryTreeNode<Integer> root, int k) {
         if(root == null){
             return null;
@@ -197,5 +211,7 @@ public class BTUses {
         // inOrder(root);
 
         printAtDepthK(root, 2);
+        boolean isNodePresent = isNodePresent(root, 8);
+        System.out.println("isNodePresent : " + isNodePresent);
     }
 }
