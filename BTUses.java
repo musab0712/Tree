@@ -1,6 +1,77 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class BTUses {
+
+    public static BinaryTreeNode<Integer> levelWiseInput() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter root data : ");
+        int data = sc.nextInt();
+        if(data == -1) {
+            return null;
+        }
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<Integer>(data);
+        Queue<BinaryTreeNode<Integer>> pChild = new LinkedList<BinaryTreeNode<Integer>>();
+        pChild.add(root);
+        while(!pChild.isEmpty()) {
+            BinaryTreeNode<Integer> front = pChild.poll();
+            System.out.print("Enter left child of " + front.data + " : ");
+            int leftdata = sc.nextInt();
+            if(leftdata != -1) {
+                BinaryTreeNode<Integer> lChild = new BinaryTreeNode<Integer>(leftdata);
+                front.left = lChild;
+                pChild.add(lChild); 
+            }
+            System.out.print("Enter right child of " + front.data + " : ");
+            int rightdata = sc.nextInt();
+            if(rightdata != -1) {
+                BinaryTreeNode<Integer> rChild = new BinaryTreeNode<Integer>(rightdata);
+                front.right = rChild;
+                pChild.add(rChild); 
+            }
+        }
+        return root;
+    }
+
+    public static BalancedTree isBalancedTreeBetter(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            int height = 0;
+            boolean isBal = true;
+            BalancedTree ans = new BalancedTree();
+            ans.height = height;
+            ans.isBalenced = isBal;
+            return ans;
+        }
+        BalancedTree left = isBalancedTreeBetter(root.left);
+        BalancedTree right = isBalancedTreeBetter(root.right);
+        int height = 1 + Math.max(left.height, right.height);
+        boolean isBal = true;
+        if(Math.abs(left.height - right.height) > 1) {
+            isBal = false;
+        }
+        if(!left.isBalenced || ! right.isBalenced) {
+            isBal = false;
+        }
+        BalancedTree ans  = new BalancedTree();
+        ans.height = height;
+        ans.isBalenced = isBal;
+        return ans;
+    }
+
+    public static boolean isBalencedTree(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            return true;
+        }
+        int leftHeight = hightOfTree(root.left);
+        int rightHight = hightOfTree(root.right);
+        if(Math.abs((leftHeight - rightHight))>1) {
+            return false;
+        }
+        boolean left = isBalencedTree(root.left);
+        boolean right = isBalencedTree(root.right);
+        return left && right;
+    }
 
     public static boolean isNodePresent(BinaryTreeNode<Integer> root, int x) {
         if(root == null){
@@ -181,7 +252,9 @@ public class BTUses {
     }
 
     public static void main(String[] args) {
-        BinaryTreeNode<Integer> root = takeTreeInputDetailed(true, 0, false);
+        //BinaryTreeNode<Integer> root = takeTreeInputDetailed(true, 0, false);
+
+        BinaryTreeNode<Integer> root = levelWiseInput();
        
         System.out.println("Print as PreOrder");
         printTree(root);
@@ -213,5 +286,8 @@ public class BTUses {
         printAtDepthK(root, 2);
         boolean isNodePresent = isNodePresent(root, 8);
         System.out.println("isNodePresent : " + isNodePresent);
+
+        BalancedTree isBalencedTree = isBalancedTreeBetter(root);
+        System.out.println("isBalencedTree : " + isBalencedTree.isBalenced); 
     }
 }
