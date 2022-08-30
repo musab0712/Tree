@@ -4,6 +4,37 @@ import java.util.Scanner;
 
 public class BTUses {
 
+    public static void printLevelWise(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            return;
+        }
+        Queue<BinaryTreeNode<Integer>> temp = new LinkedList<>();
+        temp.add(root);
+        while(!temp.isEmpty()) {
+            BinaryTreeNode<Integer> front = temp.poll();
+            System.out.print(front.data + " : ");
+            if(front.left != null) {
+                System.out.print("L " + front.left.data);
+                temp.add(front.left);
+            } 
+            if(front.right != null) {
+                System.out.print(", R " + front.right.data);
+                temp.add(front.right);
+            }
+            System.out.println();
+        }
+    } 
+
+    public static int daimeterOfTree(BinaryTreeNode<Integer> root){
+        if(root == null) {
+            return 0;
+        }
+        int left = daimeterOfTree(root.left);
+        int right = daimeterOfTree(root.right);
+        int cur = 1 + hightOfTree(root.left) + hightOfTree(root.right);
+        return Math.max(Math.max(left, right), cur);
+    }
+
     public static BinaryTreeNode<Integer> levelWiseInput() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter root data : ");
@@ -209,10 +240,10 @@ public class BTUses {
         }
         System.out.print(root.data+" : ");
         if(root.left != null) {
-            System.out.print("L "+root.left.data+", ");
+            System.out.print("L "+root.left.data);
         }
         if(root.right != null) {
-            System.out.print("R "+root.right.data);
+            System.out.print(", R "+root.right.data);
         }
         System.out.println();
         printTree(root.left);
@@ -227,10 +258,10 @@ public class BTUses {
         postOrder(root.right);
         System.out.print(root.data+" : ");
         if(root.left != null) {
-            System.out.print("L "+root.left.data+", ");
+            System.out.print("L "+root.left.data);
         }
         if(root.right != null) {
-            System.out.print("R "+root.right.data);
+            System.out.print(", R "+root.right.data);
         }
         System.out.println();
     }
@@ -242,10 +273,10 @@ public class BTUses {
         inOrder(root.left);
         System.out.print(root.data+" : ");
         if(root.left != null) {
-            System.out.print("L "+root.left.data+", ");
+            System.out.print("L "+root.left.data);
         }
         if(root.right != null) {
-            System.out.print("R "+root.right.data);
+            System.out.print(", R "+root.right.data);
         }
         System.out.println();
         inOrder(root.right);
@@ -253,7 +284,7 @@ public class BTUses {
 
     public static void main(String[] args) {
         //BinaryTreeNode<Integer> root = takeTreeInputDetailed(true, 0, false);
-
+        System.out.println("Level wise Input : ");
         BinaryTreeNode<Integer> root = levelWiseInput();
        
         System.out.println("Print as PreOrder");
@@ -289,5 +320,11 @@ public class BTUses {
 
         BalancedTree isBalencedTree = isBalancedTreeBetter(root);
         System.out.println("isBalencedTree : " + isBalencedTree.isBalenced); 
+
+        int daimeterOfTree = daimeterOfTree(root);
+        System.out.println("DaimeterOfTree : " + daimeterOfTree);
+
+        System.out.println("Print Level Wise");
+        printLevelWise(root);
     }
 }
