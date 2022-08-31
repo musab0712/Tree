@@ -4,6 +4,38 @@ import java.util.Scanner;
 
 public class BTUses {
 
+    public static void printDataK1toK2(BinaryTreeNode<Integer> root, int k1, int k2) {
+        if(root == null) {
+            return;
+        }
+        if (k1 <= root.data && k2 >= root.data) {
+            System.out.print(root.data + " ");
+        }
+        if(k1 >= root.data) {
+            printDataK1toK2(root.right, k1, k2);
+        }
+        else if(k2 < root.data) {
+            printDataK1toK2(root.left, k1, k2);
+        }
+        else {
+            printDataK1toK2(root.left, k1, k2);
+            printDataK1toK2(root.right, k1, k2);
+        }
+    }
+
+    public static boolean isDataPresentinBST(BinaryTreeNode<Integer> root, int data) {
+        if(root == null) {
+            return false;
+        }
+        if(root.data == data) {
+            return true;
+        }
+        if(data >= root.data) {
+            return isDataPresentinBST(root.right, data);
+        }
+        return isDataPresentinBST(root.left, data);
+    }
+
     public static void printLevelWise(BinaryTreeNode<Integer> root) {
         if(root == null) {
             return;
@@ -326,5 +358,11 @@ public class BTUses {
 
         System.out.println("Print Level Wise");
         printLevelWise(root);
+
+        System.out.print("Data between K1 to K2 in BST : ");
+        printDataK1toK2(root, 1, 4);
+        System.out.println();
+
+        System.out.println("Is 5 present in BST : " + isDataPresentinBST(root, 5));
     }
 }
