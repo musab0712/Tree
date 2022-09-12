@@ -4,6 +4,80 @@ import java.util.Scanner;
 
 public class BTUses {
 
+    public static boolean isBST3(BinaryTreeNode<Integer> root, int min, int max) {
+        if(root == null) {
+            return true;
+        }
+        if(root.data < min || root.data > max) {
+            return false;
+        }
+        boolean isleftBST = isBST3(root.left, min, root.data - 1);
+        boolean isRightBST = isBST3(root.right, root.data , max);
+        return isRightBST && isleftBST;
+    }
+
+    public static isBSTreturn isBST2(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            return new isBSTreturn(Integer.MAX_VALUE, Integer.MIN_VALUE, true);
+        }
+        isBSTreturn leftAns = isBST2(root.left);
+        isBSTreturn rightAns = isBST2(root.right);
+        int min = Math.min(root.data, Math.min(leftAns.min, rightAns.min));
+        int max = Math.max(root.data, Math.max(leftAns.max, rightAns.max));
+        boolean isBST = true;
+        if(leftAns.max >= root.data) isBST = false;
+        if(rightAns.min < root.data) isBST = false;
+        if(!leftAns.isBST) isBST = false;
+        if(!rightAns.isBST) isBST = false;
+        return new isBSTreturn(min, max, isBST);
+    }
+
+    public static int maximum(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            return -1;
+        }
+        int leftMax = maximum(root.left);
+        int rightMax = maximum(root.right);
+        return Math.max(root.data, Math.max(leftMax, rightMax));
+    }
+
+    public static int minimum(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            return Integer.MAX_VALUE;
+        }
+        int leftMin = minimum(root.left);
+        int rightMin = minimum(root.right);
+        return Math.min(root.data, Math.max(leftMin, rightMin));
+    }
+
+    public static boolean isBST(BinaryTreeNode<Integer> root) {
+        if(root == null) {
+            return true;
+        }
+        int leftMax = maximum(root.left);
+        if(leftMax >= root.data) {
+            return false;
+        }
+        int rightMin = minimum(root.right);
+        if(rightMin < root.data) {
+            return false;
+        }
+        boolean isLeftBST = isBST(root.left);
+        boolean isRightBST = isBST(root.right);
+        return isLeftBST && isRightBST;
+    }
+
+    public static BinaryTreeNode<Integer> construcBSTfromSortArray(int[] arr, int si, int ei) {
+        if(si > ei) {
+            return null;
+        }
+        int midI = (si + ei + 1)/2;
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<Integer>(arr[midI]);
+        root.left = construcBSTfromSortArray(arr, si, midI - 1);
+        root.right = construcBSTfromSortArray(arr, midI + 1, ei);
+        return root;
+    }
+
     public static void printDataK1toK2(BinaryTreeNode<Integer> root, int k1, int k2) {
         if(root == null) {
             return;
@@ -316,8 +390,12 @@ public class BTUses {
 
     public static void main(String[] args) {
         //BinaryTreeNode<Integer> root = takeTreeInputDetailed(true, 0, false);
-        System.out.println("Level wise Input : ");
-        BinaryTreeNode<Integer> root = levelWiseInput();
+        
+        // System.out.println("Level wise Input : ");
+        // BinaryTreeNode<Integer> root = levelWiseInput();
+
+        int[] arr = {1,2,3,4,5};
+        BinaryTreeNode<Integer> root = construcBSTfromSortArray(arr, 0, arr.length-1);
        
         System.out.println("Print as PreOrder");
         printTree(root);
@@ -364,5 +442,14 @@ public class BTUses {
         System.out.println();
 
         System.out.println("Is 5 present in BST : " + isDataPresentinBST(root, 5));
+
+        boolean isBST = isBST(root);
+        System.out.println("isBST : " + isBST);
+
+        isBSTreturn isBST2 = isBST2(root);
+        System.out.println("isBST2 : " + isBST2.isBST);
+
+        boolean isBST3 = isBST3(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        System.out.println("isBST3 : " + isBST3);
     }
 }
